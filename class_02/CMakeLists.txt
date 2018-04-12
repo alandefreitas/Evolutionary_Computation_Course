@@ -5,6 +5,6 @@ set(SOURCE_FILES
         knapsackP.h
         knapsackP.cpp
         EA.h
-        EA.cpp
+        EA.hpp
         )
 add_executable(class_02_representation ${SOURCE_FILES})

@@ -16,8 +16,8 @@ public:
     // Evolutionary Algorithm
     knapsack_p(size_t n);
     void disp();
-    // Problem-specific
     size_t size();
+    // Problem-specific
     int value(size_t i);
     int weight(size_t i);
     int capacity();

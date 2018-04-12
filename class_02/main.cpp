@@ -7,18 +7,15 @@
 
 #include "knapsackP.h"
 #include "knapsack.h"
-#include "EA.h"
+#include "EA.hpp"
 
 int main() {
-    // Problem parameters
-    const size_t problem_size = 200;
-
     // Create problem
-    knapsack_p problem(problem_size);
+    knapsack_p problem(200);
     problem.disp();
 
-    // Create solver
-    EA s(problem);
+    // Create solver for the knapsack problem
+    EA<knapsack_p,knapsack> s(problem);
     s.run();
 
     // Print final statistics

@@ -24,12 +24,12 @@ void knapsack_p::disp() {
     std::cout << "Knapsack Problem" << std::endl;
     std::cout << "Value: ";
     for (int i = 0; i < this->size(); ++i) {
-        std::cout << this->_value[i];
+        std::cout << this->_value[i] << " ";
     }
     std::cout << std::endl;
     std::cout << "Weight: ";
     for (int i = 0; i < this->size(); ++i) {
-        std::cout << this->_weight[i];
+        std::cout << this->_weight[i] << " ";
     }
     std::cout << std::endl;
     std::cout << "Capacity: " << this->_capacity << std::endl;
