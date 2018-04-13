@@ -11,9 +11,20 @@
 template <typename problem, typename solution>
 class EA {
 public:
+    enum selection_strategy {random, truncate};
+public:
     EA(problem &p);
     void run();
-    double max_fx();
+    void run(size_t iterations);
+    double best_fx();
+private:
+    void evolutionary_cycle();
+    void evaluate(std::vector<solution>& population);
+    size_t n_of_selection_candidates();
+    std::vector<size_t> selection(std::vector<solution>& population, size_t n_of_candidates, selection_strategy s);
+    std::vector<solution> reproduction(std::vector<solution>& population, std::vector<size_t>& parent_position);
+    std::vector<solution> update_population(std::vector<solution>& population, std::vector<size_t>& positions);
+
 private:
     // Search parameters
     size_t _max_generations;
@@ -26,12 +37,14 @@ private:
     // Data
     std::vector<solution> _population;
     problem _problem;
+    size_t _current_generation;
 
     // Auxiliary generator
     static std::default_random_engine _generator;
 
     // Get statistics
-    double _max_fx = std::numeric_limits<double>::min();
+    double _best_fx = std::numeric_limits<double>::min();
+
 };
 
 #endif //EVOLUTIONARY_COMPUTATION_EA_H

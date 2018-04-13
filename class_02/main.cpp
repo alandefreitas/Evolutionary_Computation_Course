@@ -1,9 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <chrono>
-#include <random>
-#include <algorithm>
-#include <type_traits>
 
 #include "knapsackP.h"
 #include "knapsack.h"
@@ -19,7 +14,7 @@ int main() {
     s.run();
 
     // Print final statistics
-    std::cout << "Max knapsack quality: " << s.max_fx() << std::endl;
+    std::cout << "Max knapsack quality: " << s.best_fx() << std::endl;
 
     return 0;
 }
