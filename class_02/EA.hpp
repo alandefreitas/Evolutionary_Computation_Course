@@ -16,7 +16,7 @@ EA<problem,solution>::EA(problem &p) :
     this->_parents_per_children = 2;
     this->_children_proportion = 7;
     this->_crossover_probability = 0.9;
-    this->_mutation_strength = 1/this->_problem.size();
+    this->_mutation_strength = 1.0/this->_problem.size();
 
     // Data
     _current_generation = 0;
@@ -44,7 +44,7 @@ void EA<problem,solution>::run(size_t iterations) {
 
 template <typename problem, typename solution>
 void EA<problem,solution>::evolutionary_cycle() {
-    std::cout << "Generation #" << ++_current_generation << " Best_fx: " << this->best_fx() << std::endl;
+    display_status();
     evaluate(this->_population);
     std::vector<size_t> parent_position = selection(this->_population, n_of_selection_candidates(),selection_strategy::random);
     std::vector<solution> children = reproduction(this->_population, parent_position);
@@ -63,6 +63,9 @@ template <typename problem, typename solution>
 void EA<problem,solution>::evaluate(std::vector<solution>& population){
     for (solution& item : population) {
         item.fx = item.evaluate(this->_problem);
+        if (this->_problem.is_minimization()){
+            item.fx = -item.fx;
+        }
         if (item.fx > this->_best_fx){
             this->_best_fx = item.fx;
         }
@@ -134,4 +137,14 @@ std::vector<solution> EA<problem,solution>::update_population(std::vector<soluti
         r.push_back(population[position]);
     }
     return r;
+}
+
+template <typename problem, typename solution>
+void EA<problem,solution>::display_status() {
+    std::cout << "Generation #" << ++_current_generation;
+    if (this->_problem.is_minimization()){
+        std::cout << " Best_fx: " << -this->best_fx() << std::endl;
+    } else {
+        std::cout << " Best_fx: " << this->best_fx() << std::endl;
+    }
 }

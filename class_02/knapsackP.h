@@ -17,6 +17,7 @@ public:
     knapsack_p(size_t n);
     void disp();
     size_t size();
+    bool is_minimization() { return false; };
     // Problem-specific
     int value(size_t i);
     int weight(size_t i);

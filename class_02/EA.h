@@ -24,6 +24,7 @@ private:
     std::vector<size_t> selection(std::vector<solution>& population, size_t n_of_candidates, selection_strategy s);
     std::vector<solution> reproduction(std::vector<solution>& population, std::vector<size_t>& parent_position);
     std::vector<solution> update_population(std::vector<solution>& population, std::vector<size_t>& positions);
+    void display_status();
 
 private:
     // Search parameters
@@ -43,7 +44,7 @@ private:
     static std::default_random_engine _generator;
 
     // Get statistics
-    double _best_fx = std::numeric_limits<double>::min();
+    double _best_fx = -std::numeric_limits<double>::max();
 
 };
 

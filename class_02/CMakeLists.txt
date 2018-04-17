@@ -4,6 +4,10 @@ set(SOURCE_FILES
         knapsack.cpp
         knapsackP.h
         knapsackP.cpp
+        route.h
+        route.cpp
+        tsp.h
+        tsp.cpp
         EA.h
         EA.hpp
         )

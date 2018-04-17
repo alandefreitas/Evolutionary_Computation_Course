@@ -30,3 +30,44 @@ double route::evaluate(tsp &p) {
     total += p.distance(this->_route[p.size() - 1],this->_route[0]);
     return total;
 }
+
+void route::mutation(tsp &p, double mutation_strength) {
+    std::uniform_int_distribution<size_t> d(0,p.size()-1);
+    for (int i = 0; i < (mutation_strength / 2) * p.size(); ++i) {
+        std::swap(this->_route[d(_generator)],this->_route[d(_generator)]);
+    }
+}
+
+route route::crossover(tsp &p, route &rhs) {
+    std::uniform_int_distribution<size_t> d(0,p.size()-1);
+    route child(p);
+    std::vector<int> set(p.size(),0);
+    // copy from parent 1
+    size_t pos1 = d(_generator);
+    size_t pos2 = d(_generator);
+    if (pos1 > pos2) {
+        std::swap(pos1,pos2);
+    }
+    std::copy(this->_route.begin()+pos1,
+              this->_route.begin()+pos2,
+              child._route.begin()+pos1);
+    for (int i = pos1; i < pos2; ++i) {
+        set[this->_route[i]] = 1;
+    }
+    // copy from parent2
+    size_t k = pos2;
+    for (int i = pos2; i < p.size(); ++i) {
+        if (!set[rhs._route[i]]){
+            child._route[k % p.size()] = rhs._route[i];
+            k++;
+        }
+    }
+    for (int i = 0; i < pos2; ++i) {
+        if (!set[rhs._route[i]]){
+            child._route[k % p.size()] = rhs._route[i];
+            k++;
+        }
+    }
+    return child;
+}
+
