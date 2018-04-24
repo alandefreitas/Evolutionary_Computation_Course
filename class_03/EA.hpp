@@ -46,9 +46,11 @@ template <typename problem, typename solution>
 void EA<problem,solution>::evolutionary_cycle() {
     display_status();
     evaluate(this->_population);
-    std::vector<size_t> parent_position = selection(this->_population, n_of_selection_candidates(),selection_strategy::uniform);
+    // scaling(this->_population);
+    std::vector<size_t> parent_position = selection(this->_population, n_of_selection_candidates(),selection_strategy::sus);
     std::vector<solution> children = reproduction(this->_population, parent_position);
     evaluate(children);
+    // scaling(children);
     std::vector<size_t> children_position = selection(this->_population, this->_population_size,selection_strategy::truncate);
     this->_population = update_population(children,children_position);
 }
@@ -102,6 +104,59 @@ std::vector<size_t> EA<problem,solution>::selection(std::vector<solution>& popul
                               }
             );
             std::iota(parent_position.begin(),parent_position.end(),0);
+            return parent_position;
+        }
+        case selection_strategy::tournament: {
+            std::vector<size_t> parent_position(n_of_candidates);
+            const size_t tournament_size = 2;
+            std::uniform_int_distribution<size_t> pos_d(0,population.size()-1);
+            for (int i = 0; i < n_of_candidates; ++i) {
+                size_t position = pos_d(EA::_generator);
+                for (int j = 1; j < tournament_size; ++j) {
+                    size_t position2 = pos_d(EA::_generator);
+                    if (population[position2].fx > population[position].fx) {
+                        position = position2;
+                    }
+                }
+                parent_position[i] = position;
+            }
+            return parent_position;
+        }
+        case selection_strategy::roulete: {
+            std::vector<size_t> parent_position(n_of_candidates);
+            std::discrete_distribution<size_t> pos_d (population.size(),0,population.size()-1,[&population](size_t pos){
+                   return population[pos].fx;
+            });
+            for (int i = 0; i < n_of_candidates; ++i) {
+                parent_position[i] = pos_d(EA::_generator);
+            }
+            return parent_position;
+        }
+        case selection_strategy::sus: {
+            double min_fx = std::min_element(population.begin(),
+                                             population.end(),
+                                             [](solution& a, solution &b){
+                        return a.fx < b.fx;
+                    })->fx - 1;
+            std::vector<size_t> parent_position(n_of_candidates);
+            double total_fit = 0.0;
+            for (solution& ind : population) {
+                total_fit += ind.fx - min_fx;
+            }
+            double gap = total_fit/n_of_candidates;
+            std::uniform_real_distribution<double> dist_r(0.0,gap);
+            double r = dist_r(EA::_generator);
+            size_t current_ind = 0;
+            double sum = population[current_ind].fx - min_fx;
+            for (int i = 0; i < n_of_candidates; ++i) {
+                while (r > sum){
+                    ++current_ind;
+                    sum += population[current_ind].fx - min_fx;
+                }
+                parent_position[i] = current_ind;
+                r += gap;
+            }
+            std::shuffle(parent_position.begin(),parent_position.end(),EA::_generator);
             return parent_position;
         }
     }

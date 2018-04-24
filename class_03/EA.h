@@ -11,7 +11,7 @@
 template <typename problem, typename solution>
 class EA {
 public:
-    enum selection_strategy {uniform, truncate};
+    enum selection_strategy {uniform, truncate, tournament, roulete, sus};
 public:
     EA(problem &p);
     void run();
