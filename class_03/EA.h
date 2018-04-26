@@ -12,6 +12,7 @@ template <typename problem, typename solution>
 class EA {
 public:
     enum selection_strategy {uniform, truncate, tournament, roulete, sus};
+    enum scaling_strategy {sigma, rank};
 public:
     EA(problem &p);
     void run();
@@ -20,6 +21,7 @@ public:
 private:
     void evolutionary_cycle();
     void evaluate(std::vector<solution>& population);
+    void scaling(std::vector<solution>& population, scaling_strategy s);
     size_t n_of_selection_candidates();
     std::vector<size_t> selection(std::vector<solution>& population, size_t n_of_candidates, selection_strategy s);
     std::vector<solution> reproduction(std::vector<solution>& population, std::vector<size_t>& parent_position);

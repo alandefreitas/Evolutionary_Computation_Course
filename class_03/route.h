@@ -21,6 +21,7 @@ public:
     void mutation(tsp &p, double mutation_strength);
     route crossover(tsp &p, route& rhs);
     double fx;
+    double fitness;
 private:
     std::vector<size_t> _route;
     static std::default_random_engine _generator;

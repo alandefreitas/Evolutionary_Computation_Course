@@ -21,6 +21,7 @@ public:
     void mutation(knapsack_p &p, double mutation_strength);
     knapsack crossover(knapsack_p &p, knapsack& rhs);
     double fx;
+    double fitness;
 private:
     std::vector<int> _knapsack;
     static std::default_random_engine _generator;

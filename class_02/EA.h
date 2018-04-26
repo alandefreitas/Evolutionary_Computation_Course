@@ -45,7 +45,6 @@ private:
 
     // Get statistics
     double _best_fx = -std::numeric_limits<double>::max();
-
 };
 
 #endif //EVOLUTIONARY_COMPUTATION_EA_H
