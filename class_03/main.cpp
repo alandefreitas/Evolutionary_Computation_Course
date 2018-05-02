@@ -9,7 +9,7 @@
 template <typename problem_class, typename solution_class>
 void solve_problem(size_t problem_size){
     // Create a random problem
-    problem_class problem(20);
+    problem_class problem(100);
     problem.disp();
 
     // Create a solver for the problem
