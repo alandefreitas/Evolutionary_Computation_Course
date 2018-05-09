@@ -18,11 +18,24 @@ EA<problem, solution>::EA(problem &p) :
         this->_comp = [](solution_ptr &a, solution_ptr &b) {
             return a->fx < b->fx;
         };
+        this->_not_comp = [](solution_ptr &a, solution_ptr &b) {
+            return a->fx > b->fx;
+        };
     } else {
         this->_comp = [](solution_ptr &a, solution_ptr &b) {
             return a->fx > b->fx;
         };
+        this->_not_comp = [](solution_ptr &a, solution_ptr &b) {
+            return a->fx < b->fx;
+        };
     }
+    this->_comp_fitness = [](solution_ptr &a, solution_ptr &b) {
+        return a->fitness > b->fitness;
+    };
+    this->_not_comp_fitness = [](solution_ptr &a, solution_ptr &b) {
+        return a->fitness < b->fitness;
+    };
+
 
     initialize_population();
 }
@@ -200,10 +213,7 @@ void EA<problem, solution>::scaling(population_type &population, scaling_strateg
 
 template<typename problem, typename solution>
 void EA<problem, solution>::attribute_fitness_from_rank(EA::population_type &population) {
-    std::sort(population.begin(), population.end(),
-              [](solution_ptr &a, std::shared_ptr<solution> &b) {
-                  return a->fx < b->fx;
-              });
+    std::sort(population.begin(), population.end(),this->_comp);
     for (int i = 0; i < population.size(); ++i) {
         population[i]->fitness = this->_problem.is_minimization() ? population.size() - i : i + 1;
     }
@@ -261,10 +271,7 @@ EA<problem, solution>::truncate_selection(EA::population_type &population, size_
     std::partial_sort(population.begin(),
                       population.begin() + std::min(n_of_candidates, population.size()),
                       population.end(),
-                      [](solution_ptr &a, solution_ptr &b) {
-                          return a->fitness > b->fitness;
-                      }
-    );
+                      this->_comp_fitness);
     std::copy(population.begin(), population.begin() + std::min(n_of_candidates, population.size()),
               std::back_inserter(parents));
     int i = 0;
@@ -310,10 +317,7 @@ EA<problem, solution>::overselection_selection(EA::population_type &population, 
     std::partial_sort(population.begin(),
                       population.begin() + population.size() * this->_overselection_proportion,
                       population.end(),
-                      [](solution_ptr &a, solution_ptr &b) {
-                          return a->fitness > b->fitness;
-                      }
-    );
+                      this->_comp_fitness);
     std::uniform_int_distribution<size_t> pos_best(0, population.size() * this->_overselection_proportion - 1);
     for (int i = 0; i < n_of_candidates * 0.8; ++i) {
         parents.push_back(population[pos_best(EA::_generator)]);
@@ -375,10 +379,7 @@ void EA<problem, solution>::window_scaling(EA::population_type &population) {
     }
     const auto iter_to_min_fitness = std::min_element(population.begin(),
                                                       population.end(),
-                                                      [](solution_ptr &a,
-                                                         std::shared_ptr<solution> &b) {
-                                                          return a->fitness < b->fitness;
-                                                      });
+                                                      this->_not_comp_fitness);
     double min_fitness = (*iter_to_min_fitness)->fitness;
     for (solution_ptr &ind : population) {
         ind->fitness -= min_fitness + 1;
@@ -454,10 +455,7 @@ void EA<problem, solution>::population_update_step(population_type &children) {
     std::partial_sort(this->_population.begin(),
                       this->_population.begin() + size_of_elite_set,
                       this->_population.end(),
-                      [](solution_ptr &a, solution_ptr &b) {
-                          return a->fitness > b->fitness;
-                      }
-    );
+                      this->_comp_fitness);
     next_population_candidates.insert(
             next_population_candidates.end(),
             this->_population.begin(),
@@ -558,8 +556,7 @@ void EA<problem, solution>::migration_step() {
             population_type individuals_immigrating;
             switch (this->_island_replacement_policy) {
                 case island_replacement_policy::worst_swap : {
-                    std::partial_sort(island2.begin(), island2.begin() + _migration_size, island2.end(),
-                                      [this](solution_ptr &a, solution_ptr &b) { return !this->_comp(a, b); });
+                    std::partial_sort(island2.begin(), island2.begin() + _migration_size, island2.end(),this->_not_comp);
                     individuals_immigrating.insert(individuals_immigrating.end(),island2.begin(), island2.begin() + _migration_size);
                     for (int j = 0; j < this->_migration_size; ++j) {
                         std::swap(*individuals_immigrating[j], *individuals_emigrating[j]);

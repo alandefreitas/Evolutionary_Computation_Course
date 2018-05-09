@@ -9,9 +9,6 @@
 #include <cmath>
 #include <functional>
 
-#include "knapsackP.h"
-#include "knapsack.h"
-
 template<typename problem, typename solution>
 class EA {
     public:
@@ -175,6 +172,9 @@ class EA {
 
         // Solution comparing
         std::function<bool(solution_ptr &, solution_ptr &)> _comp;
+        std::function<bool(solution_ptr &, solution_ptr &)> _not_comp;
+        std::function<bool(solution_ptr &, solution_ptr &)> _comp_fitness;
+        std::function<bool(solution_ptr &, solution_ptr &)> _not_comp_fitness;
 
         // Get statistics
         population_type _best_solutions;
