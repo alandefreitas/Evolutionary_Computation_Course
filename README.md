@@ -23,9 +23,22 @@ Examples for the course on evolutionary computation:
         * Sigma (`fitness <- max(bias + (fx - avg_fx)/(c * std_fx)), 0.0)`)
         * Linear rank (`fitness <- ((2-pressure_constant)/n_ind) + ((2 * rank(fx) * (pressure_constant - 1))/n_ind * (n_ind - 1))`)
         * Exponential rank (`fitness <- (1-e^(-i))/n_ind`)
+* [Class 04](./class_04/): Population Management and Multi-Modal Problems
+    * Explicit
+        * Fitness Sharing
+        * Crowding
+    * Implicit
+        * Island Model
+        * Cellular Model
+* Class 05: Parameter Control
+* Class 06: Parameter Adjustment
+* Class 07: Constraint Handling
+* Class 08: Memetic Algorithms
+* Class 09: Multi-objective Algorithms
+* Class 10: Dynamic Problems
+* Class 11: Large-Scale Problems
 
 ## Running the examples
-
 
 I have been posting some examples from my course on Evolutionary Computation here.
 
