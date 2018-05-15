@@ -30,13 +30,14 @@ Examples for the course on evolutionary computation:
     * Implicit
         * Island Model
         * Cellular Model
-* Class 05: Parameter Control
-* Class 06: Parameter Adjustment
-* Class 07: Constraint Handling
-* Class 08: Memetic Algorithms
-* Class 09: Multi-objective Algorithms
-* Class 10: Dynamic Problems
-* Class 11: Large-Scale Problems
+* Class 05: Canonic Algorithms
+* Class 06: Parameter Control
+* Class 07: Parameter Adjustment
+* Class 08: Constraint Handling
+* Class 09: Memetic Algorithms
+* Class 10: Multi-objective Algorithms
+* Class 11: Dynamic Problems
+* Class 12: Large-Scale Problems
 
 ## Running the examples
 
