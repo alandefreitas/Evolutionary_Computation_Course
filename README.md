@@ -48,6 +48,7 @@ Examples for the course on evolutionary computation:
     * Plotting data
     * Statistical Tests
 * Class 07: Parameter Control
+    * Wrapping solutions as individuals
 * Class 08: Parameter Adjustment
 * Class 09: Constraint Handling
 * Class 10: Memetic Algorithms
