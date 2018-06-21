@@ -21,7 +21,7 @@ public:
         individual(solution& rhs) : solution(rhs) {}
         void mutation(problem &p, double mutation_strength);
         individual crossover(problem &p, individual& rhs);
-        double _second_order_mutation_strength = 0.5;
+        double _second_order_mutation_strength = 0.1;
         double _crossover_probability = 0.8;
         double _mutation_strength = 0.1;
     private:
