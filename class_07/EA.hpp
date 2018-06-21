@@ -238,7 +238,8 @@ typename EA<problem, solution>::population_type EA<problem, solution>::reproduct
     population_type children;
     children.reserve(parents.size() / this->_parents_per_children);
     for (int j = 0; j < parents.size(); j += this->_parents_per_children) {
-        if (r(EA::_generator) < this->_crossover_probability) {
+        double crossover_probability = (parents[j]->_crossover_probability + parents[j + 1]->_crossover_probability)/2;
+        if (r(EA::_generator) < crossover_probability) {
             children.emplace_back(
                     std::make_shared<individual>(
                             parents[j]->crossover(
@@ -246,7 +247,7 @@ typename EA<problem, solution>::population_type EA<problem, solution>::reproduct
                                     *parents[j + 1])));
         } else {
             children.emplace_back(std::make_shared<individual>(*parents[j]));
-            children.back()->mutation(this->_problem, this->_mutation_strength);
+            children.back()->mutation(this->_problem, children.back()->_mutation_strength);
         }
     }
     return children;
@@ -818,3 +819,54 @@ double EA<problem,solution>::linear_rank_selective_pressure() { return this->_li
 
 template <typename problem, typename solution>
 void EA<problem,solution>::linear_rank_selective_pressure(double value){this->_linear_rank_selective_pressure = value;}
+
+template <typename problem, typename solution>
+void EA<problem,solution>::individual::mutation(problem &p, double mutation_strength){
+    // mutate search parameters before they influence mutation
+    std::normal_distribution<double> n(0.0,1);
+
+    _mutation_strength = _mutation_strength * exp(_second_order_mutation_strength * n(EA::_generator));
+    reflect(_mutation_strength,0.001,0.999);
+
+    _crossover_probability = _crossover_probability * exp(_second_order_mutation_strength * n(EA::_generator));
+    reflect(_crossover_probability,0.001,0.999);
+
+    // call the underlying mutation function
+    solution::mutation(p,_mutation_strength);
+}
+
+template <typename problem, typename solution>
+void EA<problem,solution>::individual::reflect(double& v, double lb, double ub){
+    // reflect is just a better version of truncating
+    while (v < lb || v > ub){
+        if (v < lb){
+            v += 2*(lb - v);
+        }
+        if (v > ub){
+            v -= 2*(v - ub);
+        }
+    }
+    return;
+}
+
+template <typename problem, typename solution>
+typename EA<problem,solution>::individual EA<problem,solution>::individual::crossover(problem &p, individual& rhs){
+    // crossover search parameters that might influence crossover
+    std::uniform_real_distribution<double> u(0.0,1.0);
+
+    double alpha = u(EA::_generator);
+    double child_mutation_strength = (alpha * this->_mutation_strength) + ((1-alpha) * rhs._mutation_strength);
+
+    alpha = u(EA::_generator);
+    double child_crossover_probability = (alpha * this->_crossover_probability) + ((1-alpha) * rhs._crossover_probability);
+
+    // call the underlying crossover function
+    individual child = this->solution::crossover(p,rhs);
+
+    // copy the values to the new born child
+    child._mutation_strength = child_mutation_strength;
+    child._crossover_probability = child_crossover_probability;
+
+    return child;
+}
+

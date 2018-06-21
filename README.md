@@ -47,13 +47,15 @@ Examples for the course on evolutionary computation:
     * Test problems
     * Plotting data
     * Statistical Tests
-* Class 07: Parameter Control
+* [Class 07](./class_07): Parameter Control
     * Wrapping solutions as individuals
+    * Adjusting search parameters in this new class
+    * Using individual parameters instead of algorithm parameters
 * Class 08: Parameter Adjustment
 * Class 09: Constraint Handling
 * Class 10: Memetic Algorithms
 * Class 11: Multi-objective Algorithms
-* Class 12: Dynamic Problems
+* Class 12: Dynamic and Robust Problems
 * Class 13: Large-Scale Problems
 
 ## Running the examples

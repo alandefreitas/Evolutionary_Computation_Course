@@ -19,15 +19,13 @@ public:
         individual(problem& rhs) : solution(rhs) {}
         individual(solution rhs) : solution(rhs) {}
         individual(solution& rhs) : solution(rhs) {}
-        void mutation(problem &p, double mutation_strength){
-            solution::mutation(p,mutation_strength);
-            // mutate search parameters
-        }
-        individual crossover(problem &p, individual& rhs){
-            individual child = this->solution::crossover(p,rhs);
-            // crossover search parameters
-            return child;
-        }
+        void mutation(problem &p, double mutation_strength);
+        individual crossover(problem &p, individual& rhs);
+        double _second_order_mutation_strength = 0.5;
+        double _crossover_probability = 0.8;
+        double _mutation_strength = 0.1;
+    private:
+        void reflect(double& v, double lb, double ub);
     };
 
     using solution_ptr = std::shared_ptr<solution>;
