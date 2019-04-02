@@ -14,7 +14,7 @@
 class tsp {
 public:
     // Evolutionary Algorithm
-    tsp(size_t n);
+    explicit tsp(size_t n);
     void disp();
     size_t size();
     bool is_minimization() { return true; };

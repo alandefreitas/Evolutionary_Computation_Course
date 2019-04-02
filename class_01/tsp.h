@@ -15,10 +15,14 @@ class tsp {
 public:
     // Evolutionary Algorithm
     tsp(size_t n);
+
     void disp();
+
     // Problem-specific
     size_t size();
+
     double distance(size_t i, size_t j);
+
 private:
     std::vector<std::vector<double>> _distance;
     static std::default_random_engine _generator;

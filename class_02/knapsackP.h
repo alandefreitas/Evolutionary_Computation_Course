@@ -25,9 +25,10 @@ public:
     int max_value();
 private:
     int _capacity;
-    int _max_value;
     std::vector<int> _value;
     std::vector<int> _weight;
+    // auxiliary
+    int _max_value;
     static std::default_random_engine _generator;
 };
 

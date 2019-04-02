@@ -17,7 +17,7 @@ int main() {
     problem.disp();
 
     // Search parameters
-    const size_t max_iterations = 100000;
+    const size_t max_iterations = 10000000;
 
     // Get statistics
     double max = std::numeric_limits<double>::min();
@@ -25,7 +25,7 @@ int main() {
     double avg = 0.0;
 
     // Random search
-    for (int i = 0; i < max_iterations; ++i) {
+    for (size_t i = 0; i < max_iterations; ++i) {
         route candidate_solution(problem);
         std::cout << "Random solution #" << i + 1 << std::endl;
         candidate_solution.disp(problem);

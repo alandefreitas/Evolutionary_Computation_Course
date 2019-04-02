@@ -9,18 +9,17 @@ std::default_random_engine EA<problem,solution>::_generator = std::default_rando
 
 template <typename problem, typename solution>
 EA<problem,solution>::EA(problem &p) :
-    _problem(p) {
+    _problem(p),
     // Parameters
-    this->_max_generations = 1000;
-    this->_population_size = 200;
-    this->_parents_per_children = 2;
-    this->_children_proportion = 7;
-    this->_crossover_probability = 0.9;
-    this->_mutation_strength = 1.0/this->_problem.size();
-
+    _max_generations(1000),
+    _population_size(200),
+    _parents_per_children(2),
+    _children_proportion(7),
+    _crossover_probability(0.9),
+    _mutation_strength(1.0/this->_problem.size()),
     // Data
-    _current_generation = 0;
-
+    _current_generation(0)
+{
     // Initialize population
     this->_population.reserve(_population_size);
     for (int i = 0; i < this->_population_size; ++i) {
@@ -33,6 +32,10 @@ void EA<problem,solution>::run() {
     for (int i = 0; i < this->_max_generations; ++i) {
         evolutionary_cycle();
     }
+    // To be replaced by:
+    //     while (!stopping_criteria()){
+    //         evolutionary_cycle();
+    //     }
 }
 
 template <typename problem, typename solution>
@@ -56,7 +59,11 @@ void EA<problem,solution>::evolutionary_cycle() {
 
 template <typename problem, typename solution>
 double EA<problem,solution>::best_fx() {
-    return this->_best_fx;
+    if (this->_problem.is_minimization()) {
+        return -this->_best_fx;
+    } else {
+        return this->_best_fx;
+    }
 }
 
 template <typename problem, typename solution>
@@ -142,9 +149,5 @@ std::vector<solution> EA<problem,solution>::update_population(std::vector<soluti
 template <typename problem, typename solution>
 void EA<problem,solution>::display_status() {
     std::cout << "Generation #" << ++_current_generation;
-    if (this->_problem.is_minimization()){
-        std::cout << " Best_fx: " << -this->best_fx() << std::endl;
-    } else {
-        std::cout << " Best_fx: " << this->best_fx() << std::endl;
-    }
+    std::cout << " - Best_fx: " << this->best_fx() << std::endl;
 }

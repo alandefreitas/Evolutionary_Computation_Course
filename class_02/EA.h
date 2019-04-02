@@ -8,22 +8,34 @@
 #include "knapsackP.h"
 #include "knapsack.h"
 
-template <typename problem, typename solution>
+template<typename problem, typename solution>
 class EA {
 public:
-    enum selection_strategy {uniform, truncate};
+    enum selection_strategy {
+        uniform, truncate
+    };
 public:
-    EA(problem &p);
+    explicit EA(problem &p);
+
     void run();
+
     void run(size_t iterations);
+
     double best_fx();
+
 private:
     void evolutionary_cycle();
-    void evaluate(std::vector<solution>& population);
+
+    void evaluate(std::vector<solution> &population);
+
     size_t n_of_selection_candidates();
-    std::vector<size_t> selection(std::vector<solution>& population, size_t n_of_candidates, selection_strategy s);
-    std::vector<solution> reproduction(std::vector<solution>& population, std::vector<size_t>& parent_position);
-    std::vector<solution> update_population(std::vector<solution>& population, std::vector<size_t>& positions);
+
+    std::vector<size_t> selection(std::vector<solution> &population, size_t n_of_candidates, selection_strategy s);
+
+    std::vector<solution> reproduction(std::vector<solution> &population, std::vector<size_t> &parent_position);
+
+    std::vector<solution> update_population(std::vector<solution> &population, std::vector<size_t> &positions);
+
     void display_status();
 
 private:

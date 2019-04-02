@@ -16,7 +16,7 @@ route::route(tsp &p)
 
 void route::disp(tsp &p) {
     std::cout << "Solution" << std::endl;
-    for (int i = 0; i < p.size(); ++i) {
+    for (size_t i = 0; i < p.size(); ++i) {
         std::cout << this->_route[i] << "\t";
     }
     std::cout << std::endl;
@@ -24,7 +24,7 @@ void route::disp(tsp &p) {
 
 double route::evaluate(tsp &p) {
     double total = 0.0;
-    for (int i = 0; i < p.size() - 1; ++i) {
+    for (size_t i = 0; i < p.size() - 1; ++i) {
         total += p.distance(this->_route[i],this->_route[i+1]);
     }
     total += p.distance(this->_route[p.size() - 1],this->_route[0]);
@@ -33,36 +33,34 @@ double route::evaluate(tsp &p) {
 
 void route::mutation(tsp &p, double mutation_strength) {
     std::uniform_int_distribution<size_t> d(0,p.size()-1);
-    for (int i = 0; i < (mutation_strength / 2) * p.size(); ++i) {
+    for (size_t i = 0; i < (mutation_strength / 2) * p.size(); ++i) {
         std::swap(this->_route[d(_generator)],this->_route[d(_generator)]);
     }
 }
 
 route route::crossover(tsp &p, route &rhs) {
     std::uniform_int_distribution<size_t> d(0,p.size()-1);
-    route child(p);
-    std::vector<int> set(p.size(),0);
+    route child(p); // this is wasting some resources
+    std::vector<short> set(p.size(),0);
     // copy from parent 1
     size_t pos1 = d(_generator);
     size_t pos2 = d(_generator);
     if (pos1 > pos2) {
         std::swap(pos1,pos2);
     }
-    std::copy(this->_route.begin()+pos1,
-              this->_route.begin()+pos2,
-              child._route.begin()+pos1);
-    for (int i = pos1; i < pos2; ++i) {
+    for (size_t i = pos1; i < pos2; ++i) {
+        child._route[i] = this->_route[i];
         set[this->_route[i]] = 1;
     }
     // copy from parent2
     size_t k = pos2;
-    for (int i = pos2; i < p.size(); ++i) {
+    for (size_t i = pos2; i < p.size(); ++i) {
         if (!set[rhs._route[i]]){
             child._route[k % p.size()] = rhs._route[i];
             k++;
         }
     }
-    for (int i = 0; i < pos2; ++i) {
+    for (size_t i = 0; i < pos2; ++i) {
         if (!set[rhs._route[i]]){
             child._route[k % p.size()] = rhs._route[i];
             k++;
@@ -73,7 +71,7 @@ route route::crossover(tsp &p, route &rhs) {
 
 double route::distance(tsp &p, route &rhs, double max_dist) {
     double hamming = 0.0;
-    for (int i = 0; i < p.size(); ++i) {
+    for (size_t i = 0; i < p.size(); ++i) {
         const size_t this_city = this->_route[i%p.size()];
         size_t next_city = this->_route[(i+1)%p.size()];
         auto iter = std::find(rhs._route.begin()+i,rhs._route.end(),this_city);
