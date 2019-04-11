@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include <boost/math/distributions/students_t.hpp>
+#include "boost/math/distributions/students_t.hpp"
 
 
 void two_samples_t_test_equal_sd(
@@ -21,9 +21,9 @@ void two_samples_t_test_equal_sd(
 
     // Print header:
     std::cout <<
-         "_______________________________________________\n"
-                 "Student t test for two samples (equal variances)\n"
-                 "_______________________________________________\n\n";
+              "_______________________________________________\n"
+              "Student t test for two samples (equal variances)\n"
+              "_______________________________________________\n\n";
     std::cout << std::setprecision(5);
     std::cout << std::setw(55) << std::left << "Number of Observations (Sample 1)" << "=  " << Sn1 << "\n";
     std::cout << std::setw(55) << std::left << "Sample 1 Mean" << "=  " << Sm1 << "\n";
@@ -38,7 +38,7 @@ void two_samples_t_test_equal_sd(
     double v = Sn1 + Sn2 - 2;
     std::cout << std::setw(55) << std::left << "Degrees of Freedom" << "=  " << v << "\n";
     // Pooled variance and hence standard deviation:
-    double sp = sqrt(((Sn1-1) * Sd1 * Sd1 + (Sn2-1) * Sd2 * Sd2) / v);
+    double sp = sqrt(((Sn1 - 1) * Sd1 * Sd1 + (Sn2 - 1) * Sd2 * Sd2) / v);
     std::cout << std::setw(55) << std::left << "Pooled Standard Deviation" << "=  " << sp << "\n";
     // t-statistic:
     double t_stat = (Sm1 - Sm2) / (sp * sqrt(1.0 / Sn1 + 1.0 / Sn2));
@@ -49,26 +49,26 @@ void two_samples_t_test_equal_sd(
     boost::math::students_t dist(v);
     double q = cdf(complement(dist, fabs(t_stat)));
     std::cout << std::setw(55) << std::left << "Probability that difference is due to chance" << "=  "
-         << std::setprecision(3) << std::scientific << 2 * q << "\n\n";
+              << std::setprecision(3) << std::scientific << 2 * q << "\n\n";
     //
     // Finally print out results of alternative hypothesis:
     //
     std::cout << std::setw(55) << std::left <<
-         "Results for Alternative Hypothesis and alpha" << "=  "
-         << std::setprecision(4) << std::fixed << alpha << "\n\n";
+              "Results for Alternative Hypothesis and alpha" << "=  "
+              << std::setprecision(4) << std::fixed << alpha << "\n\n";
     std::cout << "Alternative Hypothesis              Conclusion\n";
-    std::cout << "Sample 1 Mean != Sample 2 Mean       " ;
-    if(q < alpha / 2)
+    std::cout << "Sample 1 Mean != Sample 2 Mean       ";
+    if (q < alpha / 2)
         std::cout << "NOT REJECTED\n";
     else
         std::cout << "REJECTED\n";
     std::cout << "Sample 1 Mean <  Sample 2 Mean       ";
-    if(cdf(dist, t_stat) < alpha)
+    if (cdf(dist, t_stat) < alpha)
         std::cout << "NOT REJECTED\n";
     else
         std::cout << "REJECTED\n";
     std::cout << "Sample 1 Mean >  Sample 2 Mean       ";
-    if(cdf(complement(dist, t_stat)) < alpha)
+    if (cdf(complement(dist, t_stat)) < alpha)
         std::cout << "NOT REJECTED\n";
     else
         std::cout << "REJECTED\n";
@@ -94,9 +94,9 @@ void two_samples_t_test_unequal_sd(
 
     // Print header:
     std::cout <<
-         "_________________________________________________\n"
-                 "Student t test for two samples (unequal variances)\n"
-                 "_________________________________________________\n\n";
+              "_________________________________________________\n"
+              "Student t test for two samples (unequal variances)\n"
+              "_________________________________________________\n\n";
     std::cout << std::setprecision(5);
     std::cout << std::setw(55) << std::left << "Number of Observations (Sample 1)" << "=  " << Sn1 << "\n";
     std::cout << std::setw(55) << std::left << "Sample 1 Mean" << "=  " << Sm1 << "\n";
@@ -112,7 +112,7 @@ void two_samples_t_test_unequal_sd(
     v *= v;
     double t1 = Sd1 * Sd1 / Sn1;
     t1 *= t1;
-    t1 /=  (Sn1 - 1);
+    t1 /= (Sn1 - 1);
     double t2 = Sd2 * Sd2 / Sn2;
     t2 *= t2;
     t2 /= (Sn2 - 1);
@@ -126,35 +126,40 @@ void two_samples_t_test_unequal_sd(
     //
     boost::math::students_t dist(v);
     double q = cdf(complement(dist, fabs(t_stat)));
-    std::cout << std::setw(55) << std::left << "Probability that difference is due to chance" << "=  "
-         << std::setprecision(3) << std::scientific << 2 * q << "\n\n";
+    std::cout << std::setw(55) << std::left << "Probability that difference is due to chance" << "=  " << std::setprecision(3) << std::scientific << 2 * q << "\n\n";
+
+
+    // Calculates what T value such that the integral from [-inf,T] == 2.5%
+    // This means we have 2.5% of the probability of reaching a number outside [-inf,T]
+    // Because the distribution is symmetrycal, also 5% probability of a number outside [-T,T]
+    double t = quantile(dist, 0.025); // -1.977e+00
+    std::cout << std::setw(55) << std::left << "T value that would be enough for a 5% probability that it is due to chance (quantile) " << "=  " << std::setprecision(3) << std::scientific << t << "\n\n";
     //
     // Finally print out results of alternative hypothesis:
     //
     std::cout << std::setw(55) << std::left <<
-         "Results for Alternative Hypothesis and alpha" << "=  "
-         << std::setprecision(4) << std::fixed << alpha << "\n\n";
+              "Results for Alternative Hypothesis and alpha" << "=  "
+              << std::setprecision(4) << std::fixed << alpha << "\n\n";
     std::cout << "Alternative Hypothesis              Conclusion\n";
-    std::cout << "Sample 1 Mean != Sample 2 Mean       " ;
-    if(q < alpha / 2)
+    std::cout << "Sample 1 Mean != Sample 2 Mean       ";
+    if (q < alpha / 2)
         std::cout << "NOT REJECTED\n";
     else
         std::cout << "REJECTED\n";
     std::cout << "Sample 1 Mean <  Sample 2 Mean       ";
-    if(cdf(dist, t_stat) < alpha)
+    if (cdf(dist, t_stat) < alpha)
         std::cout << "NOT REJECTED\n";
     else
         std::cout << "REJECTED\n";
     std::cout << "Sample 1 Mean >  Sample 2 Mean       ";
-    if(cdf(complement(dist, t_stat)) < alpha)
+    if (cdf(complement(dist, t_stat)) < alpha)
         std::cout << "NOT REJECTED\n";
     else
         std::cout << "REJECTED\n";
     std::cout << std::endl << std::endl;
 }
 
-int main()
-{
+int main() {
     //
     // Run tests for Car Mileage sample data
     // http://www.itl.nist.gov/div898/handbook/eda/section3/eda3531.htm

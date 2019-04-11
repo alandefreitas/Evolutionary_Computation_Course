@@ -1,15 +1,9 @@
 set(SOURCE_FILES
         main.cpp
-        knapsack.h
-        knapsack.cpp
-        knapsackP.h
-        knapsackP.cpp
-        route.h
-        route.cpp
-        tsp.h
-        tsp.cpp
-        EA.h
-        EA.hpp
+        island_EA.h
+        island_EA.hpp
         )
 
 add_executable(class_04_population_management ${SOURCE_FILES})
+target_link_libraries(class_04_population_management PUBLIC models)
+target_include_directories(class_04_population_management PUBLIC ../class_01)

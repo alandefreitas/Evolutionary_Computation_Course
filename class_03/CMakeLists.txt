@@ -1,15 +1,11 @@
 set(SOURCE_FILES
+        # main
         main.cpp
-        knapsack.h
-        knapsack.cpp
-        knapsackP.h
-        knapsackP.cpp
-        route.h
-        route.cpp
-        tsp.h
-        tsp.cpp
-        EA.h
-        EA.hpp
+        # evolutionary algorithm
+        selection_EA.h
+        selection_EA.hpp
         )
 
 add_executable(class_03_selection ${SOURCE_FILES})
+target_link_libraries(class_03_selection PUBLIC models)
+target_include_directories(class_03_selection PUBLIC ../class_01)

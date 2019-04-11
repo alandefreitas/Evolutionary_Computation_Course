@@ -2,8 +2,8 @@
 // Created by Alan de Freitas on 12/04/2018.
 //
 
-#ifndef EVOLUTIONARY_COMPUTATION_EA_H
-#define EVOLUTIONARY_COMPUTATION_EA_H
+#ifndef EVOLUTIONARY_COMPUTATION_EA_EA_H
+#define EVOLUTIONARY_COMPUTATION_EA_EA_H
 
 #include <memory>
 #include <cmath>
@@ -24,6 +24,8 @@ public:
         double _second_order_mutation_strength = 0.1;
         double _crossover_probability = 0.8;
         double _mutation_strength = 0.1;
+        double fx;
+        double fitness;
     private:
         void reflect(double& v, double lb, double ub);
     };
@@ -268,4 +270,4 @@ private /* members */:
 
 };
 
-#endif //EVOLUTIONARY_COMPUTATION_EA_H
+#endif //EVOLUTIONARY_COMPUTATION_EA_EA_H

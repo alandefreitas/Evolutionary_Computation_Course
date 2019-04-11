@@ -1,12 +1,15 @@
-if (NOT DEFINED Boost_FOUND)
-    find_package(Boost QUIET REQUIRED)
-endif()
+# We could find boost:
+#if (NOT DEFINED Boost_FOUND)
+#    find_package(Boost QUIET REQUIRED)
+#endif()
+#if (${Boost_FOUND})
+#set(SOURCE_FILES ttest.cpp)
+#add_executable(class_06_ttest_example ${SOURCE_FILES})
+#    target_include_directories(class_06_ttest_example PUBLIC ${Boost_INCLUDE_DIR})
+#endif()
 
-if (${Boost_FOUND})
-    set(SOURCE_FILES ttest.cpp)
-    add_executable(class06_ttest_example ${SOURCE_FILES})
-    target_include_directories(class06_ttest_example PUBLIC ${Boost_INCLUDE_DIR})
-endif()
+# Or we can just use the headers
+add_executable(class_06_ttest_example ttest.cpp)
 
 if (NOT DEFINED ${PythonLibs_FOUND})
     find_package(PythonLibs)

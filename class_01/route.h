@@ -14,13 +14,26 @@
 #include "tsp.h"
 
 class route {
-public:
-    route(tsp &p);
-    void disp(tsp &p);
-    double evaluate(tsp &p);
-private:
-    std::vector<size_t> _route;
-    static std::default_random_engine _generator;
+    public:
+        // Functions we need for a random search
+        explicit route(tsp &p);
+
+        void disp(tsp &p);
+
+        double evaluate(tsp &p);
+
+        // Functions we need for an evolutionary algorithm
+        void mutation(tsp &p, double mutation_strength);
+
+        route crossover(tsp &p, route &rhs);
+
+        // Auxiliary functions
+        double distance(tsp &p, route &rhs, double max_dist = std::numeric_limits<double>::max());
+
+    private:
+        // Private members
+        std::vector<size_t> _route;
+        static std::default_random_engine _generator;
 };
 
 
