@@ -33,4 +33,5 @@ int main()
 			plt::pause(0.01);
 		}
 	}
+    plt::pause(60.00);
 }

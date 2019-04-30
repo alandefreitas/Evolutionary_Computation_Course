@@ -69,7 +69,7 @@ public:
         random // a random individual moves to another island
     };
 
-    // which individuals migrate from islands
+    // which individuals are replaced in the islands
     enum class island_replacement_policy {
         worst_swap,
         worst_overwrite,
